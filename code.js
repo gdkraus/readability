@@ -77,6 +77,13 @@ var pollysyllables = (words-(syllables1+syllables2)); // number of words with 3 
 
 var flesch_reading_ease = 206.835 - (1.015 * words/sentences) - (84.6 * total_syllables/words)
 
+// restrict the range to 0-100
+if(flesch_reading_ease > 100){
+    flesch_reading_ease = 100;
+} else if(flesch_reading_ease < 0) {
+    flesch_reading_ease = 0;
+}
+
 var gunning_fog_index = (words/sentences + 100*(pollysyllables/words)) * 0.4;
 
 var flesch_kincaid_grade_level = (0.39 * words/sentences) + (11.8 * total_syllables/words) - 15.9;
@@ -90,7 +97,7 @@ var coleman_liau = 0.0588 * (100*characters/words) - 0.296 * (100*sentences/word
 var msg ='';
     
 msg = msg + 'Flesch Reading Ease: ' + flesch_reading_ease.toFixed(1);
-msg = msg + '\nWCAG2 AAA min = 60'
+msg = msg + '\nWCAG2 AAA requires 60 or greater'
 msg = msg + '\n\n';
 msg = msg + 'Grade Level Average: ' + ((flesch_kincaid_grade_level + gunning_fog_index + automated_readability_index + coleman_liau + (sentences>=30?smog:0))/(sentences>=30?5:4)).toFixed(1);
 msg = msg + '\n';
@@ -103,7 +110,7 @@ msg = msg + '\n';
 msg = msg + '(Colemane-Liau): ' + coleman_liau.toFixed(1);
 msg = msg + '\n';
 msg = msg + (sentences>=30?'(SMOG): ' + smog.toFixed(1) + '\n':'');
-msg = msg + 'WCAG2 AAA max grade = 9';
+msg = msg + 'WCAG2 AAA requires grade 9 or lower';
 msg = msg + '\n\n';
 msg = msg + 'Words: ' + words;
 msg = msg + '\n';
